@@ -1,0 +1,61 @@
+/* ==========================================================================
+   Brisa Noturna — Design Tokens Oficiais (Brand Kit — Rodada 2)
+   Produto Estrela: Serena — Body Splash Artesanal de Lavanda Francesa (5%)
+   ========================================================================== */
+
+:root {
+  /* Fundos & Superfícies — Profundidade Obsidiana, Veludo & Ameixa Imperial */
+  --bg-abyss: #07040D;
+  --bg-midnight: #120A1F;
+  --bg-royal-night: #1B0F2E;
+  --surface-plum: #261540;
+  --surface-glass: rgba(22, 12, 38, 0.72);
+  --surface-glass-strong: rgba(15, 8, 27, 0.86);
+
+  /* Identidade Cromática — Lavanda Francesa & Luar Cristalino */
+  --brand-lavender: #9B6FC7;
+  --brand-mauve: #C6A4E6;
+  --accent-silver: #E4DFF0;
+
+  /* Tipografia & Contraste */
+  --text-primary: #F7F4FC;
+  --text-secondary: #B6ACC9;
+  --text-muted: #827699;
+
+  /* Assinatura Produto Serena */
+  --serena-dew: #D2CBE6;
+  --serena-pearl: #EFEAF7;
+
+  /* Bordas & Linhas Editoriais */
+  --border-subtle: rgba(228, 223, 240, 0.13);
+  --border-lunar: rgba(198, 164, 230, 0.28);
+  --border-glow: rgba(155, 111, 199, 0.5);
+
+  /* Sombras & Luminosidade Noturna */
+  --shadow-lunar: 0 24px 64px -20px rgba(4, 2, 10, 0.88), 0 0 0 1px rgba(228, 223, 240, 0.08);
+  --glow-lavender: radial-gradient(circle at 50% 50%, rgba(155, 111, 199, 0.26) 0%, rgba(38, 21, 64, 0.12) 48%, transparent 74%);
+  --glow-amethyst: radial-gradient(circle at 50% 0%, rgba(155, 111, 199, 0.2) 0%, rgba(38, 21, 64, 0.1) 44%, transparent 72%);
+  --glow-silver: radial-gradient(circle at 50% 50%, rgba(228, 223, 240, 0.16) 0%, transparent 65%);
+
+  /* Tipografia */
+  --font-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Sistema de Camadas (z-index) */
+  --z-base: 0;
+  --z-ambient: 1;
+  --z-content: 10;
+  --z-sticky-card-1: 20;
+  --z-sticky-card-2: 21;
+  --z-sticky-card-3: 22;
+  --z-horizontal: 30;
+  --z-navbar: 50;
+  --z-progress: 60;
+  --z-overlay: 70;
+
+  /* Ritmo & Motion */
+  --ease-lunar: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 220ms;
+  --duration-base: 420ms;
+  --duration-slow: 780ms;
+}

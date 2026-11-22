@@ -1,0 +1,319 @@
+@import "tailwindcss";
+
+@theme {
+  --color-abyss: #07040D;
+  --color-midnight: #120A1F;
+  --color-royal-night: #1B0F2E;
+  --color-plum: #261540;
+  --color-lavender: #9B6FC7;
+  --color-mauve: #C6A4E6;
+  --color-silver: #E4DFF0;
+  --color-starlight: #F7F4FC;
+  --color-mist: #B6ACC9;
+  --color-shadow-star: #827699;
+  --color-serena-dew: #D2CBE6;
+  --color-serena-pearl: #EFEAF7;
+
+  --font-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+@layer base {
+  html {
+    background-color: var(--bg-abyss);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    color-scheme: dark;
+    /* Usar clip (nunca hidden) para preservar position: sticky e GSAP ScrollTrigger */
+    overflow-x: clip;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100%;
+    background-color: var(--bg-abyss);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    overflow-x: clip;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: rgba(155, 111, 199, 0.45);
+    color: var(--text-primary);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--brand-mauve);
+    outline-offset: 3px;
+  }
+
+  /* Scrollbar sutil noturna */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--bg-abyss);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(155, 111, 199, 0.42);
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(198, 164, 230, 0.65);
+  }
+}
+
+/* ==========================================================================
+   Lenis Smooth Scroll Integration
+   ========================================================================== */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+/* ==========================================================================
+   Ritmo Visual de Fundos entre Seções (Profundidade Violeta / Ameixa)
+   ========================================================================== */
+.section-abyss {
+  background-color: var(--bg-abyss);
+  background-image:
+    radial-gradient(ellipse 80% 55% at 50% 0%, rgba(38, 21, 64, 0.48) 0%, rgba(18, 10, 31, 0.16) 48%, transparent 78%);
+}
+
+.section-velvet {
+  background-color: var(--bg-midnight);
+  background-image:
+    radial-gradient(ellipse 75% 50% at 18% 0%, rgba(155, 111, 199, 0.14) 0%, transparent 62%),
+    radial-gradient(ellipse 70% 55% at 88% 100%, rgba(38, 21, 64, 0.56) 0%, transparent 68%),
+    linear-gradient(180deg, #120A1F 0%, #160C27 55%, #11081D 100%);
+}
+
+.section-royal {
+  background-color: var(--bg-royal-night);
+  background-image:
+    radial-gradient(ellipse 85% 60% at 50% 0%, rgba(155, 111, 199, 0.2) 0%, rgba(38, 21, 64, 0.24) 45%, transparent 74%),
+    radial-gradient(ellipse 65% 45% at 85% 85%, rgba(198, 164, 230, 0.08) 0%, transparent 62%),
+    linear-gradient(180deg, #1B0F2E 0%, #170C29 52%, #120921 100%);
+}
+
+.section-ambient-glow {
+  position: relative;
+}
+
+.section-ambient-glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: var(--z-base);
+  background-image:
+    radial-gradient(circle 42rem at 14% 16%, rgba(155, 111, 199, 0.13) 0%, transparent 68%),
+    radial-gradient(circle 36rem at 86% 78%, rgba(38, 21, 64, 0.42) 0%, transparent 70%);
+}
+
+/* ==========================================================================
+   Utilitários Tipográficos & Atmosféricos Brisa Noturna
+   ========================================================================== */
+.font-display {
+  font-family: var(--font-display);
+  font-feature-settings: "liga" 1, "kern" 1;
+}
+
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+.lunar-glass {
+  background: var(--surface-glass);
+  backdrop-filter: blur(12px) saturate(130%);
+  -webkit-backdrop-filter: blur(12px) saturate(130%);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-lunar);
+}
+
+.lunar-glass-strong {
+  background: var(--surface-glass-strong);
+  backdrop-filter: blur(14px) saturate(135%);
+  -webkit-backdrop-filter: blur(14px) saturate(135%);
+  border: 1px solid var(--border-lunar);
+  box-shadow: var(--shadow-lunar);
+}
+
+/* Reduz custo de backdrop-filter em mobile e telas touch para sustentar 60fps */
+@media (max-width: 767px), (pointer: coarse) {
+  .lunar-glass {
+    background: rgba(20, 11, 35, 0.88);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  .lunar-glass-strong {
+    background: rgba(15, 8, 27, 0.94);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+}
+
+.text-gradient-lunar {
+  background: linear-gradient(120deg, var(--serena-pearl) 0%, var(--accent-silver) 42%, var(--brand-mauve) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hairline-lunar,
+.divider-lunar {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(198, 164, 230, 0.24) 22%,
+    rgba(228, 223, 240, 0.44) 50%,
+    rgba(198, 164, 230, 0.24) 78%,
+    transparent 100%
+  );
+}
+
+/* ==========================================================================
+   Animações GPU-Composited (Exclusivamente transform & opacity)
+   ========================================================================== */
+@keyframes starTwinkle {
+  0%,
+  100% {
+    opacity: 0.22;
+    transform: scale3d(0.86, 0.86, 1);
+  }
+  50% {
+    opacity: 0.92;
+    transform: scale3d(1.18, 1.18, 1);
+  }
+}
+
+.star-twinkle {
+  animation: starTwinkle var(--star-duration, 4.6s) ease-in-out var(--star-delay, 0s) infinite;
+  transform-origin: center;
+}
+
+@keyframes btnShimmer {
+  0% {
+    transform: translate3d(-135%, 0, 0) skewX(-18deg);
+    opacity: 0;
+  }
+  18% {
+    opacity: 0.72;
+  }
+  42% {
+    transform: translate3d(235%, 0, 0) skewX(-18deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translate3d(235%, 0, 0) skewX(-18deg);
+    opacity: 0;
+  }
+}
+
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.btn-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: -12% auto -12% 0;
+  width: 42%;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(239, 234, 247, 0.34) 48%,
+    rgba(198, 164, 230, 0.22) 64%,
+    transparent 100%
+  );
+  transform: translate3d(-135%, 0, 0) skewX(-18deg);
+  animation: btnShimmer var(--shimmer-duration, 4.2s) var(--ease-lunar) infinite;
+}
+
+/* Pausa animações decorativas fora da viewport para zero gasto de GPU */
+.anim-paused,
+.anim-paused .star-twinkle,
+.anim-paused .animate-ping,
+.anim-paused .btn-shimmer::after {
+  animation-play-state: paused !important;
+}
+
+/* SpotlightCard: iluminação por CSS vars sem re-render React, desativada em touch */
+.spotlight-glow {
+  opacity: 0;
+  background: radial-gradient(
+    460px circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%),
+    var(--spotlight-color, rgba(198, 164, 230, 0.18)),
+    transparent 62%
+  );
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .spotlight-card:hover .spotlight-glow {
+    opacity: 1;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .spotlight-glow {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   Acessibilidade: Redução de Movimento
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html,
+  html.lenis,
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .star-twinkle,
+  .btn-shimmer::after {
+    animation: none !important;
+  }
+
+  .star-twinkle {
+    opacity: 0.45;
+    transform: none;
+  }
+
+  .btn-shimmer::after {
+    opacity: 0;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

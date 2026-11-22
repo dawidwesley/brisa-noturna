@@ -1,10 +1,10 @@
 /* ==========================================================================
-   Brisa Noturna — Design Tokens Oficiais (Brand Kit — Rodada 2)
-   Produto Estrela: Serena — Body Splash Artesanal de Lavanda Francesa (5%)
+   Brisa Noturna | Design Tokens Oficiais (Brand Kit, Rodada 2)
+   Produto Estrela: Serena | Body Splash Artesanal de Lavanda Francesa (5%)
    ========================================================================== */
 
 :root {
-  /* Fundos & Superfícies — Profundidade Obsidiana, Veludo & Ameixa Imperial */
+  /* Fundos & Superfícies: Profundidade Obsidiana, Veludo & Ameixa Imperial */
   --bg-abyss: #07040D;
   --bg-midnight: #120A1F;
   --bg-royal-night: #1B0F2E;
@@ -12,7 +12,7 @@
   --surface-glass: rgba(22, 12, 38, 0.72);
   --surface-glass-strong: rgba(15, 8, 27, 0.86);
 
-  /* Identidade Cromática — Lavanda Francesa & Luar Cristalino */
+  /* Identidade Cromática: Lavanda Francesa & Luar Cristalino */
   --brand-lavender: #9B6FC7;
   --brand-mauve: #C6A4E6;
   --accent-silver: #E4DFF0;

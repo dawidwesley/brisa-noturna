@@ -196,6 +196,64 @@ html.lenis body {
 /* ==========================================================================
    Animações GPU-Composited (Exclusivamente transform & opacity)
    ========================================================================== */
+/* Entrada harmônica do Hero em GPU pura (sem bloqueio da main thread) */
+.hero-reveal {
+  opacity: 0;
+  transform: translate3d(0, var(--hero-y, 18px), 0) scale3d(var(--hero-scale, 1), var(--hero-scale, 1), 1);
+  transition:
+    opacity var(--hero-dur, 0.75s) var(--ease-lunar) var(--hero-delay, 0ms),
+    transform var(--hero-dur, 0.75s) var(--ease-lunar) var(--hero-delay, 0ms);
+  will-change: transform, opacity;
+}
+
+.hero-entered .hero-reveal {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+}
+
+.hero-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translate3d(0, 20px, 0);
+  transition:
+    opacity 0.72s var(--ease-lunar) var(--word-delay, 0ms),
+    transform 0.72s var(--ease-lunar) var(--word-delay, 0ms);
+  will-change: transform, opacity;
+}
+
+.hero-entered .hero-word {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+@keyframes navFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes navDrawerIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -12px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.nav-backdrop-enter {
+  animation: navFadeIn 0.2s ease-out both;
+}
+
+.nav-drawer-enter {
+  animation: navDrawerIn 0.26s var(--ease-lunar) both;
+}
+
 @keyframes starTwinkle {
   0%,
   100% {
@@ -288,6 +346,14 @@ html.lenis body {
    Acessibilidade: Redução de Movimento
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
+  .hero-reveal,
+  .hero-word {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    will-change: auto !important;
+  }
+
   html,
   html.lenis,
   .lenis.lenis-smooth {

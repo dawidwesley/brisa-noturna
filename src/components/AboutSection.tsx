@@ -73,7 +73,7 @@ export function AboutSection({ onNavigate }: AboutSectionProps) {
       <div aria-hidden="true" className="divider-lunar absolute inset-x-0 top-0" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
-        {/* Composição Editorial Assimétrica — Leitura Escaneável em 3 Segundos */}
+        {/* Composição Editorial Assimétrica: Leitura Escaneável em 3 Segundos */}
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:items-center lg:gap-14">
           {/* Coluna Esquerda: Título, Lead Empático & Medalhão Oficial da Marca */}
           <div className="lg:col-span-5">

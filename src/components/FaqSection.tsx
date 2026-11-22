@@ -72,7 +72,7 @@ export function FaqSection({ onNavigate }: FaqSectionProps) {
             </div>
           </div>
 
-          {/* Coluna Direita — Acordeão CSS Grid Ultra-Suave com Altura Estabilizada */}
+          {/* Coluna Direita: Acordeão CSS Grid Ultra-Suave com Altura Estabilizada */}
           <div className="lg:col-span-7">
             <div className="space-y-3.5 lg:min-h-[650px] xl:min-h-[590px]">
               {FAQ_ITEMS.map((item, index) => {

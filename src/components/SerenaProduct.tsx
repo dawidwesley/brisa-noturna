@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowUpRight, Check, Droplets, FileText, Sparkles } from 'lucide-react';
+import { ArrowUpRight, Check, Droplets, FileText, Flower2, Moon, Wind } from 'lucide-react';
 import {
   IMAGE_ASSETS,
   SERENA_PRODUCT,
@@ -18,6 +18,12 @@ interface SerenaProductProps {
 
 type SpecFilter = 'Todas' | TechnicalSpecCategory;
 
+const OLFACTORY_STAGE_ICONS: Record<OlfactoryLevelId, typeof Wind> = {
+  topo: Wind,
+  coracao: Flower2,
+  fundo: Moon,
+};
+
 export function SerenaProduct({ onNavigate }: SerenaProductProps) {
   const [activeNoteId, setActiveNoteId] = useState<OlfactoryLevelId>('coracao');
   const [activeSpecTab, setActiveSpecTab] = useState<SpecFilter>('Todas');
@@ -25,6 +31,7 @@ export function SerenaProduct({ onNavigate }: SerenaProductProps) {
   const activeLevel =
     SERENA_PRODUCT.olfactoryPyramid.find((level) => level.id === activeNoteId) ??
     SERENA_PRODUCT.olfactoryPyramid[0];
+  const ActiveNoteIcon = OLFACTORY_STAGE_ICONS[activeLevel.id];
 
   const filteredSpecs =
     activeSpecTab === 'Todas'
@@ -223,7 +230,7 @@ export function SerenaProduct({ onNavigate }: SerenaProductProps) {
         </div>
 
         {/* ===================================================================
-            PARTE B: Pirâmide Olfativa Interativa — 3 Tempos da Lavanda Francesa Pura (5%)
+            PARTE B: Pirâmide Olfativa Interativa: 3 Tempos da Lavanda Francesa Pura (5%)
            =================================================================== */}
         <div className="mt-20 sm:mt-24 lg:mt-32">
           <SpotlightCard className="bg-abyss/82 p-5 sm:p-10 lg:p-12">
@@ -240,7 +247,7 @@ export function SerenaProduct({ onNavigate }: SerenaProductProps) {
                 </h3>
 
                 <p className="mt-3 text-sm leading-relaxed font-light text-mist">
-                  Acompanhe a evolução autêntica da Lavanda Francesa pura em três tempos — da abertura herbal luminosa ao fundo balsâmico limpo.
+                  Acompanhe a evolução autêntica da Lavanda Francesa pura em três tempos, da abertura herbal luminosa ao fundo balsâmico limpo.
                 </p>
 
                 {/* Seletor de Abas com Framer Motion layoutId */}
@@ -341,7 +348,7 @@ export function SerenaProduct({ onNavigate }: SerenaProductProps) {
                             key={note}
                             className="flex items-center gap-2.5 rounded-xl border border-silver/15 bg-midnight/85 px-4 py-3.5 text-sm font-normal text-starlight"
                           >
-                            <Sparkles
+                            <ActiveNoteIcon
                               size={13}
                               className="shrink-0 text-mauve"
                               aria-hidden="true"

@@ -406,7 +406,7 @@ export const REMOTION_SHOWCASE: RemotionShowcaseContent = {
       act: 'Ato I',
       title: 'O campo sob a lua',
       caption: 'A névoa desce sobre a Lavanda Francesa quando a noite finalmente desacelera.',
-      timestamp: '00:00 — 00:03',
+      timestamp: '00:00 a 00:03',
       imageKey: 'lavender-field',
     },
     {
@@ -414,7 +414,7 @@ export const REMOTION_SHOWCASE: RemotionShowcaseContent = {
       act: 'Ato II',
       title: 'Orvalho e maceração',
       caption: '5% de essência pura de Lavandula angustifolia em repouso lento por 21 dias.',
-      timestamp: '00:03 — 00:07',
+      timestamp: '00:03 a 00:07',
       imageKey: 'lavender-botanical',
     },
     {
@@ -422,7 +422,7 @@ export const REMOTION_SHOWCASE: RemotionShowcaseContent = {
       act: 'Ato III',
       title: 'Serena na pele',
       caption: 'Floresça o sono. O ritual da mulher noturna.',
-      timestamp: '00:07 — 00:10',
+      timestamp: '00:07 a 00:10',
       imageKey: 'serena-hero',
     },
   ],
@@ -477,7 +477,7 @@ export const RITUAL_STEPS: [RitualStep, RitualStep, RitualStep] = [
 export const SERENA_PRODUCT: SerenaProductContent = {
   eyebrow: 'Edição de Estreia • Produto Estrela',
   name: 'Serena',
-  fullName: 'Serena — Body Splash Artesanal de Lavanda Francesa',
+  fullName: 'Serena: Body Splash Artesanal de Lavanda Francesa',
   subtitle:
     '5% de essência pura de Lavanda Francesa (Lavandula angustifolia) macerada por 21 dias. A bruma feita para transformar o fim do dia em descanso real.',
   volume: '200 ml / 6.7 fl. oz',
@@ -504,7 +504,7 @@ export const SERENA_PRODUCT: SerenaProductContent = {
       id: 'topo',
       label: 'Topo',
       stage: 'Abertura Luminosa',
-      timing: '0 — 15 min',
+      timing: '0 a 15 min',
       mood: 'Frescor herbal que libera a tensão do dia',
       description:
         'Faceta fresca, herbal e luminosa da flor de Lavanda Francesa recém-colhida. Limpa o ar ao redor e convida à primeira respiração profunda.',
@@ -518,7 +518,7 @@ export const SERENA_PRODUCT: SerenaProductContent = {
       id: 'coracao',
       label: 'Corpo',
       stage: 'Coração Floral Macerado',
-      timing: '15 min — 2 h',
+      timing: '15 min a 2 h',
       mood: 'Abraço macio que acalma a mente no ritual noturno',
       description:
         'Coração floral aveludado e doce-sereno da Lavanda Francesa (Lavandula angustifolia) macerada por 21 dias, acalmando a mente no ritual da mulher noturna.',
@@ -532,7 +532,7 @@ export const SERENA_PRODUCT: SerenaProductContent = {
       id: 'fundo',
       label: 'Fundo',
       stage: 'Assinatura de Descanso',
-      timing: '2 h — 4 h+',
+      timing: '2 h a 4 h+',
       mood: 'Rastro confortável que floresce o sono até a madrugada',
       description:
         'Base balsâmica suave, limpa e levemente amadeirada do próprio extrato natural de Lavanda Francesa, florescendo o sono na pele e nos lençóis até a madrugada.',
@@ -659,7 +659,7 @@ export const FAQ_ITEMS: [FaqItem, FaqItem, FaqItem, FaqItem, FaqItem] = [
     id: 'pele-sensivel',
     question: 'O produto é adequado para peles sensíveis?',
     answer:
-      'Serena é minimalista: apenas Lavanda Francesa (5%), vegana, testada dermatologicamente, pH fisiológico (5,5 – 6,2) e livre de parabenos ou ftalatos. Em caso de sensibilidade conhecida a fragrâncias, teste antes na parte interna do antebraço.',
+      'Serena é minimalista: apenas Lavanda Francesa (5%), vegana, testada dermatologicamente, pH fisiológico (5,5 a 6,2) e livre de parabenos ou ftalatos. Em caso de sensibilidade conhecida a fragrâncias, teste antes na parte interna do antebraço.',
   },
   {
     id: 'maceracao-artesanal',

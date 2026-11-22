@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Clock, Feather, Sparkles } from 'lucide-react';
+import { Clock, Feather, Wind } from 'lucide-react';
 import { IMAGE_ASSETS, RITUAL_HEADER, RITUAL_STEPS } from '@/data/content';
 import type { ImageKey } from '@/data/content';
 
@@ -36,7 +36,7 @@ export function RitualLayers() {
     const mm = gsap.matchMedia();
 
     // Desktop (>= 1024px): carrossel em camadas sticky com ocultação total (autoAlpha: 0)
-    // calibrado para manter 100% de opacidade durante a leitura em 720p–1440p e zerar antes da sobreposição
+    // calibrado para manter 100% de opacidade durante a leitura em 720p a 1440p e zerar antes da sobreposição
     mm.add('(min-width: 1024px) and (prefers-reduced-motion: no-preference)', () => {
       cardRefs.current.forEach((card, index) => {
         const nextCard = cardRefs.current[index + 1];
@@ -155,7 +155,7 @@ export function RitualLayers() {
                           </span>
                         </div>
 
-                        {/* Indicador discreto de etapa 01 — 02 — 03 */}
+                        {/* Indicador discreto de etapa 01 · 02 · 03 */}
                         <div
                           aria-label={`Passo ${index + 1} de 3`}
                           className="flex items-center gap-2 font-mono text-[11px] tracking-[0.14em]"
@@ -219,7 +219,7 @@ export function RitualLayers() {
 
                       <div className="rounded-xl border border-silver/12 bg-abyss px-4 py-3">
                         <div className="flex items-center gap-1.5 text-[10px] tracking-[0.2em] text-mist uppercase">
-                          <Sparkles size={12} className="shrink-0 text-mauve" aria-hidden="true" />
+                          <Wind size={12} className="shrink-0 text-mauve" aria-hidden="true" />
                           <span>Sinal Sensorial</span>
                         </div>
                         <p className="mt-1 text-xs font-medium text-serena-pearl">

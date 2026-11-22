@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { Player } from '@remotion/player';
 import type { PlayerRef } from '@remotion/player';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Film, Play, Sparkles } from 'lucide-react';
+import { Film, Play } from 'lucide-react';
 import { IMAGE_ASSETS, REMOTION_SHOWCASE } from '@/data/content';
 import { SERENA_FILM_CONFIG, SerenaFilm } from '@/remotion/SerenaFilm';
+import { LunarMark } from './LunarMark';
 
 const ACT_START_FRAMES = [0, 100, 200] as const;
 
@@ -21,12 +21,7 @@ export function FilmShowcase() {
     const update = () => setPrefersReducedMotion(mediaQuery.matches);
     update();
     mediaQuery.addEventListener('change', update);
-    // Recalcula ScrollTrigger quando o chunk lazy do Player termina de montar
-    const refreshId = window.requestAnimationFrame(() => {
-      ScrollTrigger.refresh();
-    });
     return () => {
-      window.cancelAnimationFrame(refreshId);
       mediaQuery.removeEventListener('change', update);
       if (seekTimerRef.current !== null) {
         window.clearTimeout(seekTimerRef.current);
@@ -136,7 +131,7 @@ export function FilmShowcase() {
             {/* Barra Superior Editorial da Moldura */}
             <div className="mb-2.5 flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5 px-1.5 py-1 text-[10px] tracking-[0.14em] text-mist uppercase sm:mb-3 sm:px-2 sm:text-[11px] sm:tracking-[0.2em]">
               <span className="flex items-center gap-2 text-serena-dew">
-                <Sparkles size={12} className="shrink-0 text-mauve" aria-hidden="true" />
+                <LunarMark size={13} className="shrink-0 text-mauve" />
                 <span>Brisa Noturna • Filme Programático Serena</span>
               </span>
               <span className="text-mist/90">{REMOTION_SHOWCASE.replayHint}</span>

@@ -1,113 +1,127 @@
-import { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import SplitType from 'split-type';
-import { ArrowDown, ArrowUpRight, Sparkles } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import type { CSSProperties } from 'react';
+import { ArrowDown, ArrowUpRight } from 'lucide-react';
 import { HERO, IMAGE_ASSETS } from '@/data/content';
+import { LunarMark } from './LunarMark';
 import { MagnetButton } from './MagnetButton';
-
-gsap.registerPlugin(ScrollTrigger);
 
 interface HeroSectionProps {
   onNavigate: (href: string) => void;
 }
 
+const TITLE_LINE_WORDS = HERO.titleLines.map((line) => line.split(' '));
+
 export function HeroSection({ onNavigate }: HeroSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const bottleFrameRef = useRef<HTMLDivElement>(null);
   const bottleImgRef = useRef<HTMLImageElement>(null);
+  const [isEntered, setIsEntered] = useState(false);
+  const [isBottleLoaded, setIsBottleLoaded] = useState(false);
 
+  // Sincroniza estado se a imagem heroica já veio decodificada do preload/cache
   useEffect(() => {
-    const section = sectionRef.current;
-    const titleEl = titleRef.current;
-    if (!section || !titleEl) return;
+    const img = bottleImgRef.current;
+    if (img && img.complete && img.naturalWidth > 0) {
+      setIsBottleLoaded(true);
+    }
+  }, []);
 
+  // Entrada harmônica em GPU pura pós-document.fonts.ready (com fallback seguro de 250ms)
+  useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
       '(prefers-reduced-motion: reduce)'
     ).matches;
 
-    if (prefersReducedMotion) return;
+    if (prefersReducedMotion) {
+      setIsEntered(true);
+      return;
+    }
 
-    let split: SplitType | null = null;
-    const mm = gsap.matchMedia();
+    let cancelled = false;
+    let rafId = 0;
 
-    const ctx = gsap.context(() => {
-      split = new SplitType(titleEl, { types: 'words,chars' });
-
-      const entryTimeline = gsap.timeline({
-        defaults: { ease: 'power3.out' },
+    const triggerEntrance = () => {
+      if (cancelled) return;
+      rafId = window.requestAnimationFrame(() => {
+        if (!cancelled) {
+          setIsEntered(true);
+        }
       });
+    };
 
-      entryTimeline
-        .from('[data-hero-badge]', {
-          opacity: 0,
-          y: 16,
-          duration: 0.7,
+    const fallbackTimer = window.setTimeout(triggerEntrance, 250);
+
+    if (document.fonts?.ready) {
+      document.fonts.ready
+        .then(() => {
+          window.clearTimeout(fallbackTimer);
+          triggerEntrance();
         })
-        .from(
-          split.chars ?? split.words ?? titleEl,
-          {
-            opacity: 0,
-            y: 26,
-            duration: 0.85,
-            stagger: 0.018,
-          },
-          '-=0.45'
-        )
-        .from(
-          '[data-hero-copy]',
-          {
-            opacity: 0,
-            y: 22,
-            duration: 0.8,
-            stagger: 0.1,
-          },
-          '-=0.55'
-        )
-        .from(
-          bottleFrameRef.current,
-          {
-            opacity: 0,
-            y: 34,
-            scale: 0.96,
-            duration: 1.05,
-          },
-          '-=0.85'
-        )
-        .from(
-          '[data-hero-highlight]',
-          {
-            opacity: 0,
-            y: 18,
-            duration: 0.7,
-            stagger: 0.08,
-          },
-          '-=0.65'
-        );
-    }, section);
-
-    // Paralaxe suave da imagem do frasco Serena apenas em telas >= 768px (evita jitter em touch mobile)
-    mm.add('(min-width: 768px) and (prefers-reduced-motion: no-preference)', () => {
-      if (!bottleImgRef.current) return;
-      gsap.to(bottleImgRef.current, {
-        yPercent: -10,
-        scale: 1.08,
-        force3D: true,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 1,
-        },
-      });
-    });
+        .catch(() => {
+          // Mantém o fallback de 250ms caso document.fonts rejeite
+        });
+    } else {
+      window.clearTimeout(fallbackTimer);
+      triggerEntrance();
+    }
 
     return () => {
-      mm.revert();
-      ctx.revert();
-      split?.revert();
+      cancelled = true;
+      window.clearTimeout(fallbackTimer);
+      if (rafId !== 0) {
+        window.cancelAnimationFrame(rafId);
+      }
+    };
+  }, []);
+
+  // Paralaxe suave do frasco Serena em desktop adiada pós-entrada para 60fps no frame 0
+  useEffect(() => {
+    const section = sectionRef.current;
+    const bottleImg = bottleImgRef.current;
+    if (!section || !bottleImg) return;
+
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+    if (prefersReducedMotion) return;
+
+    let cancelled = false;
+    let revertMedia: (() => void) | null = null;
+
+    const timer = window.setTimeout(() => {
+      if (cancelled) return;
+      Promise.all([import('gsap'), import('gsap/ScrollTrigger')])
+        .then(([{ gsap }, { ScrollTrigger }]) => {
+          if (cancelled || !sectionRef.current || !bottleImgRef.current) return;
+          gsap.registerPlugin(ScrollTrigger);
+
+          const mm = gsap.matchMedia();
+          mm.add('(min-width: 768px) and (prefers-reduced-motion: no-preference)', () => {
+            if (!bottleImgRef.current || !sectionRef.current) return;
+            gsap.to(bottleImgRef.current, {
+              yPercent: -10,
+              scale: 1.08,
+              force3D: true,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: sectionRef.current,
+                start: 'top top',
+                end: 'bottom top',
+                scrub: 1,
+              },
+            });
+          });
+
+          revertMedia = () => mm.revert();
+        })
+        .catch(() => {
+          // Mantém o Hero íntegro mesmo se a importação diferida falhar
+        });
+    }, 220);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+      revertMedia?.();
     };
   }, []);
 
@@ -116,11 +130,18 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
     onNavigate(href);
   };
 
+  let runningWordIndex = 0;
+
   return (
     <section
       id="inicio"
       ref={sectionRef}
-      className="section-abyss relative flex min-h-screen flex-col justify-between pt-28 pb-12 sm:pt-32 lg:pt-36 lg:pb-16"
+      className={[
+        'section-abyss relative flex min-h-screen flex-col justify-between pt-28 pb-12 sm:pt-32 lg:pt-36 lg:pb-16',
+        isEntered ? 'hero-entered' : '',
+      ]
+        .filter(Boolean)
+        .join(' ')}
     >
       {/* Atmosfera Lunar Ametista Sutil (Gradientes Radiais Puros, zero blur-3xl pesado na GPU) */}
       <div
@@ -159,33 +180,51 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
           {/* Coluna Editorial Esquerda */}
           <div className="lg:col-span-7">
             <div
-              data-hero-badge
-              className="mb-6 inline-flex max-w-full items-center gap-2 rounded-full border border-silver/16 bg-midnight/75 px-3.5 py-2 text-[10px] font-medium tracking-[0.14em] text-serena-dew uppercase sm:mb-7 sm:gap-2.5 sm:px-4 sm:text-[11px] sm:tracking-[0.22em]"
+              className="hero-reveal mb-6 inline-flex max-w-full items-center gap-2 rounded-full border border-silver/16 bg-midnight/75 px-3.5 py-2 text-[10px] font-medium tracking-[0.14em] text-serena-dew uppercase sm:mb-7 sm:gap-2.5 sm:px-4 sm:text-[11px] sm:tracking-[0.22em]"
+              style={{ '--hero-delay': '40ms', '--hero-y': '12px' } as CSSProperties}
             >
-              <Sparkles size={13} className="shrink-0 text-mauve" aria-hidden="true" />
+              <LunarMark size={14} className="shrink-0 text-mauve" />
               <span>{HERO.badge}</span>
             </div>
 
             <h1
-              ref={titleRef}
               aria-label={HERO.title}
               className="font-display text-[2.35rem] leading-[1.04] font-medium tracking-[-0.015em] text-starlight min-[375px]:text-[2.7rem] sm:text-6xl lg:text-[4.5rem] xl:text-[5rem]"
             >
-              <span className="block">{HERO.titleLines[0]}</span>
-              <span className="block italic text-serena-pearl">{HERO.titleLines[1]}</span>
+              {TITLE_LINE_WORDS.map((words, lineIndex) => (
+                <span
+                  key={lineIndex}
+                  className={lineIndex === 1 ? 'block italic text-serena-pearl' : 'block'}
+                >
+                  {words.map((word, wordIdx) => {
+                    const currentOrder = runningWordIndex++;
+                    const delayMs = 90 + currentOrder * 55;
+                    return (
+                      <span
+                        key={`${lineIndex}-${wordIdx}`}
+                        className="hero-word"
+                        style={{ '--word-delay': `${delayMs}ms` } as CSSProperties}
+                      >
+                        {word}
+                        {wordIdx < words.length - 1 ? '\u00A0' : ''}
+                      </span>
+                    );
+                  })}
+                </span>
+              ))}
             </h1>
 
             <p
-              data-hero-copy
-              className="mt-6 max-w-xl text-base leading-relaxed font-light text-mist sm:mt-7 sm:text-lg sm:leading-[1.72]"
+              className="hero-reveal mt-6 max-w-xl text-base leading-relaxed font-light text-mist sm:mt-7 sm:text-lg sm:leading-[1.72]"
+              style={{ '--hero-delay': '260ms', '--hero-y': '16px' } as CSSProperties}
             >
               {HERO.subtitle}
             </p>
 
             {/* CTAs com MagnetButton */}
             <div
-              data-hero-copy
-              className="mt-8 flex flex-col items-stretch gap-3.5 sm:mt-9 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4"
+              className="hero-reveal mt-8 flex flex-col items-stretch gap-3.5 sm:mt-9 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4"
+              style={{ '--hero-delay': '340ms', '--hero-y': '16px' } as CSSProperties}
             >
               <MagnetButton
                 href={HERO.primaryCta.href}
@@ -215,8 +254,17 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
 
             {/* 3 Micro-Indicadores Editoriais */}
             <div className="mt-10 grid grid-cols-1 gap-4 border-t border-silver/12 pt-6 sm:mt-12 sm:grid-cols-3 sm:gap-6 sm:pt-7">
-              {HERO.highlights.map((item) => (
-                <div key={item.label} data-hero-highlight className="space-y-1">
+              {HERO.highlights.map((item, idx) => (
+                <div
+                  key={item.label}
+                  className="hero-reveal space-y-1"
+                  style={
+                    {
+                      '--hero-delay': `${400 + idx * 65}ms`,
+                      '--hero-y': '14px',
+                    } as CSSProperties
+                  }
+                >
                   <p className="text-xs font-medium tracking-[0.12em] text-serena-pearl uppercase">
                     {item.label}
                   </p>
@@ -226,9 +274,19 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
             </div>
           </div>
 
-          {/* Coluna Fotográfica Direita — Frasco Serena */}
+          {/* Coluna Fotográfica Direita: Frasco Serena */}
           <div className="lg:col-span-5">
-            <div ref={bottleFrameRef} className="relative mx-auto max-w-md lg:ml-auto lg:max-w-none">
+            <div
+              className="hero-reveal relative mx-auto max-w-md lg:ml-auto lg:max-w-none"
+              style={
+                {
+                  '--hero-delay': '140ms',
+                  '--hero-y': '24px',
+                  '--hero-scale': '0.97',
+                  '--hero-dur': '0.9s',
+                } as CSSProperties
+              }
+            >
               {/* Moldura Principal 3:4 */}
               <div className="relative aspect-[3/4] overflow-hidden rounded-[1.75rem] border border-silver/18 bg-midnight shadow-[0_36px_90px_-24px_rgba(4,2,10,0.95)] sm:rounded-[2rem]">
                 <img
@@ -239,7 +297,12 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
                   height={1200}
                   loading="eager"
                   fetchPriority="high"
-                  className="h-full w-full scale-[1.03] object-cover object-center md:will-change-transform"
+                  onLoad={() => setIsBottleLoaded(true)}
+                  onError={() => setIsBottleLoaded(true)}
+                  className={[
+                    'h-full w-full scale-[1.03] object-cover object-center transition-opacity duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] md:will-change-transform',
+                    isBottleLoaded ? 'opacity-100' : 'opacity-0',
+                  ].join(' ')}
                 />
                 {/* Vinheta Editorial Fina */}
                 <div
@@ -277,8 +340,14 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
 
       {/* Indicador de Scroll Inferior */}
       <div
-        className="relative mx-auto mt-12 flex w-full max-w-7xl items-center justify-between px-5 sm:px-8 lg:mt-14 lg:px-10"
-        style={{ zIndex: 'var(--z-content)' }}
+        className="hero-reveal relative mx-auto mt-12 flex w-full max-w-7xl items-center justify-between px-5 sm:px-8 lg:mt-14 lg:px-10"
+        style={
+          {
+            zIndex: 'var(--z-content)',
+            '--hero-delay': '480ms',
+            '--hero-y': '10px',
+          } as CSSProperties
+        }
       >
         <a
           href="#sobre"
@@ -296,7 +365,7 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
         </a>
 
         <span className="hidden text-[11px] tracking-[0.24em] text-shadow-star uppercase sm:inline">
-          01 — Atmosfera Noturna
+          01 · Atmosfera Noturna
         </span>
       </div>
     </section>

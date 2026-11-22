@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { BRAND } from '@/data/content';
 import { LunarMark } from './LunarMark';
@@ -86,14 +85,11 @@ export function Navbar({ onNavigate }: NavbarProps) {
     };
   }, []);
 
-  // Detecção da seção ativa via IntersectionObserver (zero getBoundingClientRect no scroll)
+  // Detecção da seção ativa via IntersectionObserver com suporte a seções montadas em lazy load
   useEffect(() => {
     if (typeof IntersectionObserver === 'undefined') return;
 
-    const elements = OBSERVED_SECTION_IDS.map((id) => document.getElementById(id)).filter(
-      (el): el is HTMLElement => el !== null
-    );
-    if (elements.length === 0) return;
+    const observedElements = new Set<HTMLElement>();
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -111,8 +107,39 @@ export function Navbar({ onNavigate }: NavbarProps) {
       }
     );
 
-    elements.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
+    const scanAndObserve = () => {
+      let foundCount = 0;
+      for (const id of OBSERVED_SECTION_IDS) {
+        const el = document.getElementById(id);
+        if (el) {
+          foundCount += 1;
+          if (!observedElements.has(el)) {
+            observedElements.add(el);
+            observer.observe(el);
+          }
+        }
+      }
+      return foundCount === OBSERVED_SECTION_IDS.length;
+    };
+
+    const allFound = scanAndObserve();
+    let mutationObserver: MutationObserver | null = null;
+
+    if (!allFound && typeof MutationObserver !== 'undefined') {
+      const mainContainer = document.getElementById('conteudo-principal') ?? document.body;
+      mutationObserver = new MutationObserver(() => {
+        if (scanAndObserve()) {
+          mutationObserver?.disconnect();
+          mutationObserver = null;
+        }
+      });
+      mutationObserver.observe(mainContainer, { childList: true, subtree: true });
+    }
+
+    return () => {
+      mutationObserver?.disconnect();
+      observer.disconnect();
+    };
   }, []);
 
   useEffect(() => {
@@ -165,7 +192,7 @@ export function Navbar({ onNavigate }: NavbarProps) {
             href="#inicio"
             onClick={(event) => handleLinkClick(event, '#inicio')}
             className="group flex min-h-[44px] min-w-0 items-center gap-2 rounded-full pr-1.5 text-starlight transition-colors hover:text-serena-pearl sm:gap-2.5 sm:pr-2"
-            aria-label="Brisa Noturna — Voltar ao início"
+            aria-label="Brisa Noturna: voltar ao início"
           >
             <LunarMark
               size={20}
@@ -192,13 +219,13 @@ export function Navbar({ onNavigate }: NavbarProps) {
                     ].join(' ')}
                   >
                     {link.label}
-                    {isActive && (
-                      <motion.span
-                        layoutId="nav-active-dot"
-                        className="absolute inset-x-4 bottom-1.5 h-[1.5px] rounded-full bg-gradient-to-r from-lavender via-mauve to-silver"
-                        transition={{ type: 'spring', stiffness: 320, damping: 32 }}
-                      />
-                    )}
+                    <span
+                      aria-hidden="true"
+                      className={[
+                        'pointer-events-none absolute inset-x-4 bottom-1.5 h-[1.5px] origin-center rounded-full bg-gradient-to-r from-lavender via-mauve to-silver transition-[transform,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]',
+                        isActive ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0',
+                      ].join(' ')}
+                    />
                   </a>
                 </li>
               );
@@ -229,82 +256,71 @@ export function Navbar({ onNavigate }: NavbarProps) {
         </nav>
       </header>
 
-      {/* Menu Mobile Acessível */}
-      <AnimatePresence>
-        {isMobileOpen && (
-          <>
-            {/* Backdrop para fechar ao tocar fora */}
-            <motion.div
-              aria-hidden="true"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              onClick={() => setIsMobileOpen(false)}
-              className="fixed inset-0 bg-abyss/65 lg:hidden"
-              style={{ zIndex: 'calc(var(--z-overlay) - 1)' }}
-            />
+      {/* Menu Mobile Acessível em CSS GPU puro */}
+      {isMobileOpen && (
+        <>
+          <div
+            aria-hidden="true"
+            onClick={() => setIsMobileOpen(false)}
+            className="nav-backdrop-enter fixed inset-0 bg-abyss/65 lg:hidden"
+            style={{ zIndex: 'calc(var(--z-overlay) - 1)' }}
+          />
 
-            <motion.div
-              id="mobile-navigation-drawer"
-              initial={{ opacity: 0, y: -14 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -14 }}
-              transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
-              className="fixed inset-x-3 top-[74px] max-h-[calc(100dvh-90px)] overflow-y-auto rounded-3xl lunar-glass-strong p-5 sm:inset-x-4 sm:p-6 lg:hidden"
-              style={{ zIndex: 'var(--z-overlay)' }}
-              role="dialog"
-              aria-label="Menu de navegação móvel"
-            >
-              <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-silver/12 pb-3">
-                <span className="text-[11px] tracking-[0.2em] text-mauve uppercase">
-                  {BRAND.editionLabel}
-                </span>
-                <span className="text-xs text-mist">{BRAND.origin}</span>
-              </div>
+          <div
+            id="mobile-navigation-drawer"
+            className="nav-drawer-enter fixed inset-x-3 top-[74px] max-h-[calc(100dvh-90px)] overflow-y-auto rounded-3xl lunar-glass-strong p-5 sm:inset-x-4 sm:p-6 lg:hidden"
+            style={{ zIndex: 'var(--z-overlay)' }}
+            role="dialog"
+            aria-label="Menu de navegação móvel"
+          >
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-silver/12 pb-3">
+              <span className="text-[11px] tracking-[0.2em] text-mauve uppercase">
+                {BRAND.editionLabel}
+              </span>
+              <span className="text-xs text-mist">{BRAND.origin}</span>
+            </div>
 
-              <ul className="flex flex-col gap-1">
-                {BRAND.navLinks.map((link) => {
-                  const isActive = activeSection === link.href.replace('#', '');
-                  return (
-                    <li key={link.href}>
-                      <a
-                        href={link.href}
-                        onClick={(event) => handleLinkClick(event, link.href)}
+            <ul className="flex flex-col gap-1">
+              {BRAND.navLinks.map((link) => {
+                const isActive = activeSection === link.href.replace('#', '');
+                return (
+                  <li key={link.href}>
+                    <a
+                      href={link.href}
+                      onClick={(event) => handleLinkClick(event, link.href)}
+                      className={[
+                        'flex min-h-[48px] items-center justify-between rounded-xl px-4 text-sm tracking-[0.12em] uppercase transition-colors',
+                        isActive
+                          ? 'bg-plum/70 text-starlight'
+                          : 'text-mist hover:bg-plum/40 hover:text-starlight',
+                      ].join(' ')}
+                    >
+                      <span>{link.label}</span>
+                      <span
+                        aria-hidden="true"
                         className={[
-                          'flex min-h-[48px] items-center justify-between rounded-xl px-4 text-sm tracking-[0.12em] uppercase transition-colors',
-                          isActive
-                            ? 'bg-plum/70 text-starlight'
-                            : 'text-mist hover:bg-plum/40 hover:text-starlight',
+                          'h-1.5 w-1.5 rounded-full',
+                          isActive ? 'bg-mauve' : 'bg-silver/25',
                         ].join(' ')}
-                      >
-                        <span>{link.label}</span>
-                        <span
-                          aria-hidden="true"
-                          className={[
-                            'h-1.5 w-1.5 rounded-full',
-                            isActive ? 'bg-mauve' : 'bg-silver/25',
-                          ].join(' ')}
-                        />
-                      </a>
-                    </li>
-                  );
-                })}
-              </ul>
+                      />
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
 
-              <div className="mt-5 border-t border-silver/12 pt-4">
-                <a
-                  href="#contato"
-                  onClick={(event) => handleLinkClick(event, '#contato')}
-                  className="flex min-h-[48px] w-full items-center justify-center rounded-full bg-silver px-5 text-xs font-medium tracking-[0.16em] text-abyss uppercase transition-colors hover:bg-serena-pearl"
-                >
-                  Reservar Serena
-                </a>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+            <div className="mt-5 border-t border-silver/12 pt-4">
+              <a
+                href="#contato"
+                onClick={(event) => handleLinkClick(event, '#contato')}
+                className="flex min-h-[48px] w-full items-center justify-center rounded-full bg-silver px-5 text-xs font-medium tracking-[0.16em] text-abyss uppercase transition-colors hover:bg-serena-pearl"
+              >
+                Reservar Serena
+              </a>
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 }

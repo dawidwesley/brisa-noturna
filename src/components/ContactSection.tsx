@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import {
   AlertCircle,
   ArrowUpRight,
+  Award,
   Check,
   CheckCircle2,
   Clock,
@@ -15,7 +16,6 @@ import {
   Moon,
   Send,
   ShieldCheck,
-  Sparkles,
 } from 'lucide-react';
 import { CONTACT_INFO } from '@/data/content';
 import type { ContactChannel } from '@/data/content';
@@ -51,7 +51,7 @@ function getChannelIcon(id: ContactChannel['id']) {
   }
 }
 
-const CARE_PROOF_ICONS = [Sparkles, Gift, Moon] as const;
+const CARE_PROOF_ICONS = [Award, Gift, Moon] as const;
 
 function isValidContactValue(value: string): boolean {
   const trimmed = value.trim();
@@ -255,7 +255,7 @@ export function ContactSection() {
         {/* 3 Provas de Cuidado do Atelier */}
         <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-3">
           {CONTACT_INFO.careProofs.map((proof, index) => {
-            const Icon = CARE_PROOF_ICONS[index] ?? Sparkles;
+            const Icon = CARE_PROOF_ICONS[index] ?? Award;
             return (
               <div
                 key={proof.title}

@@ -133,10 +133,16 @@ export function RitualLayers() {
               ? 'object-[58%_32%]'
               : 'object-center';
             const mobileFrameClass = isSquareArtwork
-              ? 'aspect-square bg-[#080410] p-2 sm:p-3 lg:aspect-auto lg:p-4'
+              ? 'aspect-square bg-abyss lg:aspect-auto'
               : isRitualPhoto
                 ? 'aspect-[4/3] bg-abyss lg:aspect-auto'
                 : 'h-60 bg-abyss sm:h-72 lg:h-auto';
+            const textColClass = isSquareArtwork
+              ? 'lg:col-span-6 xl:col-span-7'
+              : 'lg:col-span-7';
+            const imageColClass = isSquareArtwork
+              ? 'lg:col-span-6 xl:col-span-5'
+              : 'lg:col-span-5';
 
             return (
               <article
@@ -149,7 +155,7 @@ export function RitualLayers() {
               >
                 <div className="grid grid-cols-1 items-stretch lg:min-h-[460px] lg:grid-cols-12">
                   {/* Conteúdo do Passo */}
-                  <div className="flex flex-col justify-between p-5 sm:p-10 lg:col-span-7 lg:p-12">
+                  <div className={`flex flex-col justify-between p-5 sm:p-10 lg:p-12 ${textColClass}`}>
                     <div>
                       <div className="flex flex-wrap items-center justify-between gap-2.5 border-b border-silver/12 pb-4 sm:gap-4 sm:pb-5">
                         <div className="flex items-center gap-3">
@@ -235,10 +241,11 @@ export function RitualLayers() {
                     </div>
                   </div>
 
-                  {/* Fotografia Atmosférica da Camada (respeita 1:1 integral no Passo 03 e 4:3 no Passo 02) */}
+                  {/* Fotografia Atmosférica Full-Bleed (object-cover sem sobras; Passo 03 calibrado para 0% corte topo/base) */}
                   <div
                     className={[
-                      'relative overflow-hidden rounded-b-[1.75rem] border-t border-silver/12 sm:rounded-b-[2rem] lg:col-span-5 lg:flex lg:min-h-[420px] lg:items-center lg:justify-center lg:rounded-r-[2rem] lg:rounded-bl-none lg:border-t-0 lg:border-l',
+                      'relative overflow-hidden rounded-b-[1.75rem] border-t border-silver/12 sm:rounded-b-[2rem] lg:min-h-[420px] lg:rounded-r-[2rem] lg:rounded-bl-none lg:border-t-0 lg:border-l',
+                      imageColClass,
                       mobileFrameClass,
                     ].join(' ')}
                   >
@@ -249,11 +256,7 @@ export function RitualLayers() {
                       height={dims.height}
                       loading="lazy"
                       decoding="async"
-                      className={
-                        isSquareArtwork
-                          ? 'h-full w-full object-contain object-center'
-                          : `h-full w-full object-cover ${objectPositionClass}`
-                      }
+                      className={`h-full w-full object-cover ${objectPositionClass}`}
                     />
                     {!isSquareArtwork && (
                       <>

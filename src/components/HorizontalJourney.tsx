@@ -313,15 +313,18 @@ export function HorizontalJourney() {
                 <article
                   key={chapter.number}
                   data-journey-panel
-                  className="relative isolate grid h-[58vh] min-h-[410px] max-h-[580px] w-[78vw] max-w-[1040px] shrink-0 transform-gpu grid-cols-12 overflow-hidden rounded-[2rem] border border-silver/16 bg-midnight shadow-[0_32px_80px_-28px_rgba(4,2,10,0.94)] [backface-visibility:hidden]"
+                  className={[
+                    'relative isolate h-[58vh] min-h-[410px] max-h-[580px] w-[78vw] max-w-[1040px] shrink-0 transform-gpu overflow-hidden rounded-[2rem] border border-silver/16 bg-midnight shadow-[0_32px_80px_-28px_rgba(4,2,10,0.94)] [backface-visibility:hidden]',
+                    isSquareArtwork ? 'flex items-stretch' : 'grid grid-cols-12',
+                  ].join(' ')}
                 >
-                  {/* Imagem: arte 1:1 exibida integralmente sem crop; demais com overscan GPU zero-seam */}
+                  {/* Imagem full-bleed: Cap. 4 usa coluna 1:1 (max-w-54%) com object-cover (0% corte topo/base); demais com overscan GPU zero-seam */}
                   <div
                     className={[
-                      'relative col-span-7 overflow-hidden',
+                      'relative overflow-hidden',
                       isSquareArtwork
-                        ? 'flex items-center justify-center bg-[#080410] p-3 xl:p-5'
-                        : 'bg-midnight',
+                        ? 'aspect-square h-full max-w-[54%] shrink-0 bg-midnight'
+                        : 'col-span-7 bg-midnight',
                     ].join(' ')}
                   >
                     {isSquareArtwork ? (
@@ -332,7 +335,7 @@ export function HorizontalJourney() {
                         height={dims.height}
                         loading="lazy"
                         decoding="async"
-                        className="h-full w-full object-contain object-center"
+                        className="h-full w-full transform-gpu object-cover object-center [backface-visibility:hidden]"
                       />
                     ) : (
                       <img
@@ -351,7 +354,7 @@ export function HorizontalJourney() {
                       aria-hidden="true"
                       className={[
                         'pointer-events-none absolute inset-y-0 -right-[3px] transform-gpu bg-gradient-to-r from-transparent to-midnight [backface-visibility:hidden]',
-                        isSquareArtwork ? 'w-14 via-midnight/50' : 'w-28 via-midnight/80',
+                        isSquareArtwork ? 'w-16 via-midnight/55' : 'w-28 via-midnight/80',
                       ].join(' ')}
                     />
                     {!isSquareArtwork && (
@@ -365,7 +368,12 @@ export function HorizontalJourney() {
                   </div>
 
                   {/* Conteúdo Editorial do Capítulo (-ml-[2px] + bg-midnight sólido em GPU) */}
-                  <div className="relative z-10 col-span-5 -ml-[2px] flex transform-gpu flex-col justify-between bg-midnight p-8 [backface-visibility:hidden] xl:p-11">
+                  <div
+                    className={[
+                      'relative z-10 -ml-[2px] flex transform-gpu flex-col justify-between bg-midnight p-8 [backface-visibility:hidden] xl:p-11',
+                      isSquareArtwork ? 'min-w-0 flex-1' : 'col-span-5',
+                    ].join(' ')}
+                  >
                     <div>
                       <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-b border-silver/14 pb-4">
                         <span className="text-[11px] font-medium tracking-[0.24em] text-mauve uppercase">
@@ -462,7 +470,7 @@ export function HorizontalJourney() {
                     decoding="async"
                     className={
                       isSquareArtwork
-                        ? 'h-full w-full object-contain object-center'
+                        ? 'h-full w-full object-cover object-center'
                         : `h-full w-full object-cover ${objectPositionClass}`
                     }
                   />

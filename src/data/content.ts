@@ -232,11 +232,11 @@ export const IMAGE_ASSETS: Record<ImageKey, ImageAsset> = {
     alt: 'Ramos frescos de Lavanda Francesa (Lavandula angustifolia) com gotículas finas de orvalho prateado sobre fundo escuro.',
   },
   'ritual-noturno': {
-    src: '/images/ritual-noturno.jpg',
+    src: '/images/ritual-noturno-v2.jpg',
     alt: 'Mulher em quarto tranquilo à meia-luz borrifando uma névoa fina de Lavanda Francesa antes de dormir.',
   },
   'serena-hero': {
-    src: '/images/serena-hero.jpg',
+    src: '/images/serena-hero-v2.jpg',
     alt: 'Frasco artesanal em vidro fumê-ametista do Body Splash Serena, da Brisa Noturna, sobre pedra escura úmida com ramos de lavanda.',
   },
 };
@@ -611,7 +611,7 @@ export const TECHNICAL_SHEET: TechnicalSpecItem[] = [
     category: 'Composição & Ética',
     label: 'Embalagem, Segurança & Ética',
     specification:
-      'Vidro fumê-ametista reciclável com válvula spray névoa fina prata. Fórmula livre de parabenos, ftalatos e corantes artificiais; testada dermatologicamente.',
+      'Vidro fumê-ametista reciclável com válvula spray névoa fina prata. Fórmula livre de parabenos e ftalatos, testada dermatologicamente.',
   },
   {
     id: 'modo-de-uso-pele',
@@ -625,7 +625,7 @@ export const TECHNICAL_SHEET: TechnicalSpecItem[] = [
     category: 'Uso & Conservação',
     label: 'Ritual nos Lençóis & Quarto',
     specification:
-      'Para envolver o ambiente pré-sono, aplicar uma bruma leve no ar, sobre o travesseiro e a roupa de cama a cerca de 30 cm de distância, alguns minutos antes de deitar.',
+      'Para envolver o ambiente pré-sono, aplicar uma bruma leve no ar do quarto ou a cerca de 30 cm da roupa de cama, evitando borrifar muito próximo de tecidos brancos ou delicados.',
   },
   {
     id: 'precaucoes',
@@ -653,7 +653,7 @@ export const FAQ_ITEMS: [FaqItem, FaqItem, FaqItem, FaqItem, FaqItem] = [
     id: 'roupa-de-cama',
     question: 'Posso borrifar o Serena no travesseiro e na roupa de cama?',
     answer:
-      'Sim, sem risco de manchar. A fórmula é translúcida, livre de corantes e feita com álcool de cereais neutro: basta borrifar uma névoa fina a cerca de 30 cm do travesseiro e aguardar alguns instantes.',
+      'Sim, com uma névoa leve e delicada a cerca de 30 cm de distância, aguardando alguns instantes antes de deitar. Por possuir coloração lilás suave, recomendamos evitar aplicar muito próximo de tecidos brancos ou delicados, priorizando a pele e o ar do quarto.',
   },
   {
     id: 'pele-sensivel',

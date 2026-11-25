@@ -304,7 +304,7 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
                     onLoad={() => setIsBottleLoaded(true)}
                     onError={() => setIsBottleLoaded(true)}
                     className={[
-                      'h-full w-full object-contain object-center transition-opacity duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]',
+                      'h-full w-full object-cover object-center transition-opacity duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]',
                       isBottleLoaded ? 'opacity-100' : 'opacity-0',
                     ].join(' ')}
                   />

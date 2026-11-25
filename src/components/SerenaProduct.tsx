@@ -75,7 +75,7 @@ export function SerenaProduct({ onNavigate }: SerenaProductProps) {
                   height={1254}
                   loading="lazy"
                   decoding="async"
-                  className="h-full w-full object-contain object-center"
+                  className="h-full w-full object-cover object-center"
                 />
               </div>
 

@@ -160,9 +160,9 @@ export function FilmShowcase() {
                   }}
                 />
               ) : (
-                /* Fallback Elegante para prefers-reduced-motion: reduce (1:1 integral sem cortes) */
+                /* Fallback Elegante para prefers-reduced-motion: reduce (full-bleed 1:1 sem sobras) */
                 <div className="relative grid grid-cols-12 overflow-hidden bg-abyss md:aspect-[16/9]">
-                  <div className="relative col-span-12 flex aspect-square items-center justify-center bg-[#080410] p-3 md:col-span-5 md:aspect-auto md:p-4">
+                  <div className="relative col-span-12 aspect-square overflow-hidden bg-abyss md:col-span-6 md:aspect-auto">
                     <img
                       src={IMAGE_ASSETS['serena-hero'].src}
                       alt={IMAGE_ASSETS['serena-hero'].alt}
@@ -170,10 +170,10 @@ export function FilmShowcase() {
                       height={1254}
                       loading="lazy"
                       decoding="async"
-                      className="h-full w-full object-contain object-center"
+                      className="h-full w-full object-cover object-center"
                     />
                   </div>
-                  <div className="col-span-12 flex flex-col justify-center p-5 sm:p-7 md:col-span-7 lg:p-10">
+                  <div className="col-span-12 flex flex-col justify-center p-5 sm:p-7 md:col-span-6 lg:p-10">
                     <span className="text-[11px] tracking-[0.2em] text-mauve uppercase sm:tracking-[0.24em]">
                       Modo Movimento Reduzido Ativo
                     </span>

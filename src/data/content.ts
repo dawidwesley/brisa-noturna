@@ -483,7 +483,7 @@ export const SERENA_PRODUCT: SerenaProductContent = {
   volume: '200 ml / 6.7 fl. oz',
   olfactoryFamily: 'Aromático Floral Puro • Lavanda Francesa',
   concentration: 'Body Splash Artesanal • 5% de Essência',
-  price: 'R$ 89,90',
+  price: 'R$ 34,90',
   priceNote: 'Pequenos lotes artesanais • Envase sob encomenda após 21 dias de maceração',
   sensoryDescription: [
     'Serena entrega a pureza absoluta da Lavanda Francesa a 5%, sem misturas que competem com o silêncio do quarto. Na primeira borrifada, o frescor herbal limpo solta o peso do dia e convida a uma respiração mais longa.',
@@ -493,7 +493,7 @@ export const SERENA_PRODUCT: SerenaProductContent = {
     '5% Essência de Lavanda Francesa',
     'Mono-Essência Pura',
     'Maceração de 21 Dias',
-    'Vegano & Cruelty-Free',
+    'Livre de Parabenos & Ftalatos',
   ],
   ctaLabel: 'Reservar meu Serena',
   ctaHref: '#contato',
@@ -611,7 +611,7 @@ export const TECHNICAL_SHEET: TechnicalSpecItem[] = [
     category: 'Composição & Ética',
     label: 'Embalagem, Segurança & Ética',
     specification:
-      'Vidro fumê-ametista reciclável com válvula spray névoa fina prata. Vegano, Cruelty-Free, livre de parabenos, ftalatos e corantes artificiais; testado dermatologicamente.',
+      'Vidro fumê-ametista reciclável com válvula spray névoa fina prata. Fórmula livre de parabenos, ftalatos e corantes artificiais; testada dermatologicamente.',
   },
   {
     id: 'modo-de-uso-pele',
@@ -659,7 +659,7 @@ export const FAQ_ITEMS: [FaqItem, FaqItem, FaqItem, FaqItem, FaqItem] = [
     id: 'pele-sensivel',
     question: 'O produto é adequado para peles sensíveis?',
     answer:
-      'Serena é minimalista: apenas Lavanda Francesa (5%), vegana, testada dermatologicamente, pH fisiológico (5,5 a 6,2) e livre de parabenos ou ftalatos. Em caso de sensibilidade conhecida a fragrâncias, teste antes na parte interna do antebraço.',
+      'Serena é minimalista: apenas Lavanda Francesa (5%), testada dermatologicamente, com pH fisiológico (5,5 a 6,2) e livre de parabenos ou ftalatos. Em caso de sensibilidade conhecida a fragrâncias, teste antes na parte interna do antebraço.',
   },
   {
     id: 'maceracao-artesanal',
@@ -753,7 +753,7 @@ export const CONTACT_INFO: ContactInfoContent = {
       {
         value: 'Reservar Serena (200 ml)',
         label: 'Reservar Serena',
-        subtitle: '200 ml • R$ 89,90 • Lote atual',
+        subtitle: '200 ml • R$ 34,90 • Lote atual',
       },
       {
         value: 'Presente / Edição Especial',

@@ -14,8 +14,8 @@ gsap.registerPlugin(ScrollTrigger);
 const IMAGE_DIMENSIONS: Record<ImageKey, { width: number; height: number }> = {
   'lavender-field': { width: 1376, height: 768 },
   'lavender-botanical': { width: 1200, height: 896 },
-  'ritual-noturno': { width: 1200, height: 896 },
-  'serena-hero': { width: 896, height: 1200 },
+  'ritual-noturno': { width: 1451, height: 1084 },
+  'serena-hero': { width: 1254, height: 1254 },
 };
 
 interface NightStar {
@@ -303,10 +303,11 @@ export function HorizontalJourney() {
             {HORIZONTAL_JOURNEY.map((chapter) => {
               const asset = IMAGE_ASSETS[chapter.imageKey];
               const dims = IMAGE_DIMENSIONS[chapter.imageKey];
-              const objectPositionClass =
-                chapter.imageKey === 'ritual-noturno'
-                  ? 'object-[60%_25%]'
-                  : 'object-center';
+              const isSquareArtwork = chapter.imageKey === 'serena-hero';
+              const isRitualPhoto = chapter.imageKey === 'ritual-noturno';
+              const objectPositionClass = isRitualPhoto
+                ? 'object-[58%_32%]'
+                : 'object-center';
 
               return (
                 <article
@@ -314,29 +315,53 @@ export function HorizontalJourney() {
                   data-journey-panel
                   className="relative isolate grid h-[58vh] min-h-[410px] max-h-[580px] w-[78vw] max-w-[1040px] shrink-0 transform-gpu grid-cols-12 overflow-hidden rounded-[2rem] border border-silver/16 bg-midnight shadow-[0_32px_80px_-28px_rgba(4,2,10,0.94)] [backface-visibility:hidden]"
                 >
-                  {/* Imagem com Overscan Real + Paralaxe GPU sem costura/seam */}
-                  <div className="relative col-span-7 overflow-hidden bg-midnight">
-                    <img
-                      data-journey-parallax
-                      src={asset.src}
-                      alt={asset.alt}
-                      width={dims.width}
-                      height={dims.height}
-                      loading="lazy"
-                      decoding="async"
-                      className={`absolute -top-[4%] -left-[12%] h-[108%] w-[124%] max-w-none transform-gpu object-cover [backface-visibility:hidden] ${objectPositionClass}`}
-                    />
+                  {/* Imagem: arte 1:1 exibida integralmente sem crop; demais com overscan GPU zero-seam */}
+                  <div
+                    className={[
+                      'relative col-span-7 overflow-hidden',
+                      isSquareArtwork
+                        ? 'flex items-center justify-center bg-[#080410] p-3 xl:p-5'
+                        : 'bg-midnight',
+                    ].join(' ')}
+                  >
+                    {isSquareArtwork ? (
+                      <img
+                        src={asset.src}
+                        alt={asset.alt}
+                        width={dims.width}
+                        height={dims.height}
+                        loading="lazy"
+                        decoding="async"
+                        className="h-full w-full object-contain object-center"
+                      />
+                    ) : (
+                      <img
+                        data-journey-parallax
+                        src={asset.src}
+                        alt={asset.alt}
+                        width={dims.width}
+                        height={dims.height}
+                        loading="lazy"
+                        decoding="async"
+                        className={`absolute -top-[4%] -left-[12%] h-[108%] w-[124%] max-w-none transform-gpu object-cover [backface-visibility:hidden] ${objectPositionClass}`}
+                      />
+                    )}
                     {/* Gradiente de fusão suave na borda direita em camada GPU eliminando qualquer linha subpixel */}
                     <div
                       aria-hidden="true"
-                      className="pointer-events-none absolute inset-y-0 -right-[3px] w-28 transform-gpu bg-gradient-to-r from-transparent via-midnight/80 to-midnight [backface-visibility:hidden]"
+                      className={[
+                        'pointer-events-none absolute inset-y-0 -right-[3px] transform-gpu bg-gradient-to-r from-transparent to-midnight [backface-visibility:hidden]',
+                        isSquareArtwork ? 'w-14 via-midnight/50' : 'w-28 via-midnight/80',
+                      ].join(' ')}
                     />
-                    <span
-                      aria-hidden="true"
-                      className="pointer-events-none absolute bottom-5 left-7 font-display text-8xl leading-none italic text-serena-pearl/18 select-none"
-                    >
-                      {chapter.number}
-                    </span>
+                    {!isSquareArtwork && (
+                      <span
+                        aria-hidden="true"
+                        className="pointer-events-none absolute bottom-5 left-7 font-display text-8xl leading-none italic text-serena-pearl/18 select-none"
+                      >
+                        {chapter.number}
+                      </span>
+                    )}
                   </div>
 
                   {/* Conteúdo Editorial do Capítulo (-ml-[2px] + bg-midnight sólido em GPU) */}
@@ -410,10 +435,16 @@ export function HorizontalJourney() {
           {HORIZONTAL_JOURNEY.map((chapter) => {
             const asset = IMAGE_ASSETS[chapter.imageKey];
             const dims = IMAGE_DIMENSIONS[chapter.imageKey];
-            const objectPositionClass =
-              chapter.imageKey === 'ritual-noturno'
-                ? 'object-[60%_25%]'
-                : 'object-center';
+            const isSquareArtwork = chapter.imageKey === 'serena-hero';
+            const isRitualPhoto = chapter.imageKey === 'ritual-noturno';
+            const objectPositionClass = isRitualPhoto
+              ? 'object-[58%_32%]'
+              : 'object-center';
+            const mobileAspectClass = isSquareArtwork
+              ? 'aspect-square bg-[#080410]'
+              : isRitualPhoto
+                ? 'aspect-[4/3] bg-midnight'
+                : 'aspect-[16/10] bg-midnight';
 
             return (
               <article
@@ -421,7 +452,7 @@ export function HorizontalJourney() {
                 data-journey-mobile-card
                 className="overflow-hidden rounded-3xl border border-silver/16 bg-midnight"
               >
-                <div className="relative aspect-[16/10] w-full overflow-hidden bg-midnight">
+                <div className={`relative w-full overflow-hidden ${mobileAspectClass}`}>
                   <img
                     src={asset.src}
                     alt={asset.alt}
@@ -429,21 +460,36 @@ export function HorizontalJourney() {
                     height={dims.height}
                     loading="lazy"
                     decoding="async"
-                    className={`h-full w-full object-cover ${objectPositionClass}`}
+                    className={
+                      isSquareArtwork
+                        ? 'h-full w-full object-contain object-center'
+                        : `h-full w-full object-cover ${objectPositionClass}`
+                    }
                   />
-                  <div
-                    aria-hidden="true"
-                    className="pointer-events-none absolute inset-0 bg-gradient-to-t from-midnight via-transparent to-transparent"
-                  />
-                  <span className="absolute top-3.5 left-3.5 rounded-full border border-silver/20 bg-abyss/85 px-3 py-1 text-[10px] tracking-[0.18em] text-serena-pearl uppercase sm:top-4 sm:left-4 sm:px-3.5 sm:text-[11px]">
-                    Capítulo {chapter.number}
-                  </span>
+                  {!isSquareArtwork && (
+                    <>
+                      <div
+                        aria-hidden="true"
+                        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-midnight via-transparent to-transparent"
+                      />
+                      <span className="absolute top-3.5 left-3.5 rounded-full border border-silver/20 bg-abyss/85 px-3 py-1 text-[10px] tracking-[0.18em] text-serena-pearl uppercase sm:top-4 sm:left-4 sm:px-3.5 sm:text-[11px]">
+                        Capítulo {chapter.number}
+                      </span>
+                    </>
+                  )}
                 </div>
 
                 <div className="p-5 sm:p-8">
-                  <p className="text-[11px] font-medium tracking-[0.2em] text-mauve uppercase">
-                    {chapter.eyebrow}
-                  </p>
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <p className="text-[11px] font-medium tracking-[0.2em] text-mauve uppercase">
+                      {chapter.eyebrow}
+                    </p>
+                    {isSquareArtwork && (
+                      <span className="rounded-full border border-silver/20 bg-abyss/85 px-3 py-1 text-[10px] tracking-[0.18em] text-serena-pearl uppercase">
+                        Capítulo {chapter.number}
+                      </span>
+                    )}
+                  </div>
                   <h3 className="mt-2 font-display text-[1.7rem] leading-[1.14] font-medium text-starlight sm:text-3xl">
                     {chapter.title}
                   </h3>

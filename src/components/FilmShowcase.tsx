@@ -160,21 +160,17 @@ export function FilmShowcase() {
                   }}
                 />
               ) : (
-                /* Fallback Elegante para prefers-reduced-motion: reduce */
+                /* Fallback Elegante para prefers-reduced-motion: reduce (1:1 integral sem cortes) */
                 <div className="relative grid grid-cols-12 overflow-hidden bg-abyss md:aspect-[16/9]">
-                  <div className="relative col-span-12 h-56 sm:h-64 md:col-span-5 md:h-auto">
+                  <div className="relative col-span-12 flex aspect-square items-center justify-center bg-[#080410] p-3 md:col-span-5 md:aspect-auto md:p-4">
                     <img
                       src={IMAGE_ASSETS['serena-hero'].src}
                       alt={IMAGE_ASSETS['serena-hero'].alt}
-                      width={896}
-                      height={1200}
+                      width={1254}
+                      height={1254}
                       loading="lazy"
                       decoding="async"
-                      className="h-full w-full object-cover object-center"
-                    />
-                    <div
-                      aria-hidden="true"
-                      className="absolute inset-0 bg-gradient-to-t from-abyss/85 via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:to-abyss/90"
+                      className="h-full w-full object-contain object-center"
                     />
                   </div>
                   <div className="col-span-12 flex flex-col justify-center p-5 sm:p-7 md:col-span-7 lg:p-10">

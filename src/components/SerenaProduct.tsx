@@ -64,30 +64,23 @@ export function SerenaProduct({ onNavigate }: SerenaProductProps) {
             PARTE A: Showcase Heroico do Produto Serena
            =================================================================== */}
         <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12 lg:gap-14">
-          {/* Galeria Editorial (Frasco + Macro Botânica Sobreposta) */}
+          {/* Galeria Editorial (Frasco 1:1 integral + Macro Botânica alinhada abaixo sem sobrepor a arte) */}
           <div className="lg:col-span-6">
             <div className="relative mx-auto max-w-xl lg:max-w-none">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-silver/18 bg-abyss shadow-[0_32px_84px_-24px_rgba(4,2,10,0.94)]">
+              <div className="relative aspect-square w-full overflow-hidden rounded-[2rem] border border-silver/18 bg-[#080410] shadow-[0_32px_84px_-24px_rgba(4,2,10,0.94)]">
                 <img
                   src={IMAGE_ASSETS['serena-hero'].src}
                   alt={IMAGE_ASSETS['serena-hero'].alt}
-                  width={896}
-                  height={1200}
+                  width={1254}
+                  height={1254}
                   loading="lazy"
                   decoding="async"
-                  className="h-full w-full object-cover object-center"
+                  className="h-full w-full object-contain object-center"
                 />
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 bg-gradient-to-t from-abyss/70 via-transparent to-transparent"
-                />
-                <div className="absolute top-5 left-5 rounded-full lunar-glass px-4 py-1.5 text-[11px] tracking-[0.22em] text-serena-pearl uppercase">
-                  {SERENA_PRODUCT.volume} • 5%
-                </div>
               </div>
 
-              {/* Cartão Fotográfico Botânico Sobreposto */}
-              <div className="mt-5 grid grid-cols-12 items-center gap-3.5 rounded-2xl border border-mauve/22 bg-abyss/92 p-3.5 shadow-[0_24px_60px_-20px_rgba(4,2,10,0.96)] sm:gap-4 sm:p-4 lg:absolute lg:-right-6 lg:-bottom-8 lg:mt-0 lg:w-[76%]">
+              {/* Cartão Fotográfico Botânico abaixo da arte 1:1 (zero obstrução de texto ou frasco) */}
+              <div className="mt-5 grid grid-cols-12 items-center gap-3.5 rounded-2xl border border-mauve/22 bg-abyss/92 p-3.5 shadow-[0_24px_60px_-20px_rgba(4,2,10,0.96)] sm:gap-4 sm:p-4">
                 <div className="col-span-4 aspect-[4/3] overflow-hidden rounded-xl border border-silver/14 bg-midnight">
                   <img
                     src={IMAGE_ASSETS['lavender-botanical'].src}
@@ -100,9 +93,14 @@ export function SerenaProduct({ onNavigate }: SerenaProductProps) {
                   />
                 </div>
                 <div className="col-span-8 min-w-0 pr-1 sm:pr-2">
-                  <p className="text-[10px] font-medium tracking-[0.22em] text-mauve uppercase">
-                    Mono-Essência Pura • 5%
-                  </p>
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <p className="text-[10px] font-medium tracking-[0.22em] text-mauve uppercase">
+                      Mono-Essência Pura • 5%
+                    </p>
+                    <span className="rounded-full border border-silver/16 bg-midnight/85 px-2.5 py-0.5 text-[10px] tracking-[0.14em] text-serena-dew uppercase">
+                      {SERENA_PRODUCT.volume}
+                    </span>
+                  </div>
                   <p className="mt-1 font-display text-xl italic text-starlight">
                     Lavandula angustifolia
                   </p>

@@ -13,6 +13,7 @@ const TITLE_LINE_WORDS = HERO.titleLines.map((line) => line.split(' '));
 
 export function HeroSection({ onNavigate }: HeroSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
+  const bottleCardRef = useRef<HTMLDivElement>(null);
   const bottleImgRef = useRef<HTMLImageElement>(null);
   const [isEntered, setIsEntered] = useState(false);
   const [isBottleLoaded, setIsBottleLoaded] = useState(false);
@@ -73,11 +74,11 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
     };
   }, []);
 
-  // Paralaxe suave do frasco Serena em desktop adiada pós-entrada para 60fps no frame 0
+  // Paralaxe vertical sutil do cartão do frasco em desktop sem zoom/corte nas bordas 1:1
   useEffect(() => {
     const section = sectionRef.current;
-    const bottleImg = bottleImgRef.current;
-    if (!section || !bottleImg) return;
+    const bottleCard = bottleCardRef.current;
+    if (!section || !bottleCard) return;
 
     const prefersReducedMotion = window.matchMedia(
       '(prefers-reduced-motion: reduce)'
@@ -91,15 +92,14 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
       if (cancelled) return;
       Promise.all([import('gsap'), import('gsap/ScrollTrigger')])
         .then(([{ gsap }, { ScrollTrigger }]) => {
-          if (cancelled || !sectionRef.current || !bottleImgRef.current) return;
+          if (cancelled || !sectionRef.current || !bottleCardRef.current) return;
           gsap.registerPlugin(ScrollTrigger);
 
           const mm = gsap.matchMedia();
           mm.add('(min-width: 768px) and (prefers-reduced-motion: no-preference)', () => {
-            if (!bottleImgRef.current || !sectionRef.current) return;
-            gsap.to(bottleImgRef.current, {
-              yPercent: -10,
-              scale: 1.08,
+            if (!bottleCardRef.current || !sectionRef.current) return;
+            gsap.to(bottleCardRef.current, {
+              y: -18,
               force3D: true,
               ease: 'none',
               scrollTrigger: {
@@ -274,7 +274,7 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
             </div>
           </div>
 
-          {/* Coluna Fotográfica Direita: Frasco Serena */}
+          {/* Coluna Fotográfica Direita: Frasco Serena (proporção exata 1:1 sem cortes) */}
           <div className="lg:col-span-5">
             <div
               className="hero-reveal relative mx-auto max-w-md lg:ml-auto lg:max-w-none"
@@ -287,31 +287,31 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
                 } as CSSProperties
               }
             >
-              {/* Moldura Principal 3:4 */}
-              <div className="relative aspect-[3/4] overflow-hidden rounded-[1.75rem] border border-silver/18 bg-midnight shadow-[0_36px_90px_-24px_rgba(4,2,10,0.95)] sm:rounded-[2rem]">
-                <img
-                  ref={bottleImgRef}
-                  src={IMAGE_ASSETS['serena-hero'].src}
-                  alt={IMAGE_ASSETS['serena-hero'].alt}
-                  width={896}
-                  height={1200}
-                  loading="eager"
-                  fetchPriority="high"
-                  onLoad={() => setIsBottleLoaded(true)}
-                  onError={() => setIsBottleLoaded(true)}
-                  className={[
-                    'h-full w-full scale-[1.03] object-cover object-center transition-opacity duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] md:will-change-transform',
-                    isBottleLoaded ? 'opacity-100' : 'opacity-0',
-                  ].join(' ')}
-                />
-                {/* Vinheta Editorial Fina */}
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 bg-gradient-to-t from-abyss/75 via-transparent to-abyss/20"
-                />
+              <div
+                ref={bottleCardRef}
+                className="overflow-hidden rounded-[1.75rem] border border-silver/18 bg-[#080410] shadow-[0_36px_90px_-24px_rgba(4,2,10,0.95)] sm:rounded-[2rem] md:will-change-transform"
+              >
+                {/* Moldura Principal 1:1 integral (1254x1254) sem corte de bordas ou laterais */}
+                <div className="relative aspect-square w-full overflow-hidden bg-[#080410]">
+                  <img
+                    ref={bottleImgRef}
+                    src={IMAGE_ASSETS['serena-hero'].src}
+                    alt={IMAGE_ASSETS['serena-hero'].alt}
+                    width={1254}
+                    height={1254}
+                    loading="eager"
+                    fetchPriority="high"
+                    onLoad={() => setIsBottleLoaded(true)}
+                    onError={() => setIsBottleLoaded(true)}
+                    className={[
+                      'h-full w-full object-contain object-center transition-opacity duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]',
+                      isBottleLoaded ? 'opacity-100' : 'opacity-0',
+                    ].join(' ')}
+                  />
+                </div>
 
-                {/* Selo Editorial Inferior Interno */}
-                <div className="absolute inset-x-3 bottom-3 rounded-2xl lunar-glass px-3.5 py-3 sm:inset-x-5 sm:bottom-5 sm:px-4 sm:py-3.5">
+                {/* Barra Editorial Inferior fora da arte para não cobrir rótulo, reflexo nem lua */}
+                <div className="border-t border-silver/14 bg-midnight/90 px-4 py-3.5 sm:px-5 sm:py-4">
                   <div className="flex flex-wrap items-center justify-between gap-2.5">
                     <div>
                       <p className="font-display text-xl italic leading-none text-serena-pearl">

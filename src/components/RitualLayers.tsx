@@ -16,8 +16,8 @@ const STICKY_Z_VARS = [
 const IMAGE_DIMENSIONS: Record<ImageKey, { width: number; height: number }> = {
   'lavender-field': { width: 1376, height: 768 },
   'lavender-botanical': { width: 1200, height: 896 },
-  'ritual-noturno': { width: 1200, height: 896 },
-  'serena-hero': { width: 896, height: 1200 },
+  'ritual-noturno': { width: 1451, height: 1084 },
+  'serena-hero': { width: 1254, height: 1254 },
 };
 
 export function RitualLayers() {
@@ -127,10 +127,16 @@ export function RitualLayers() {
           {RITUAL_STEPS.map((step, index) => {
             const asset = IMAGE_ASSETS[step.imageKey];
             const dims = IMAGE_DIMENSIONS[step.imageKey];
-            const objectPositionClass =
-              step.imageKey === 'ritual-noturno'
-                ? 'object-[60%_25%]'
-                : 'object-center';
+            const isSquareArtwork = step.imageKey === 'serena-hero';
+            const isRitualPhoto = step.imageKey === 'ritual-noturno';
+            const objectPositionClass = isRitualPhoto
+              ? 'object-[58%_32%]'
+              : 'object-center';
+            const mobileFrameClass = isSquareArtwork
+              ? 'aspect-square bg-[#080410] p-2 sm:p-3 lg:aspect-auto lg:p-4'
+              : isRitualPhoto
+                ? 'aspect-[4/3] bg-abyss lg:aspect-auto'
+                : 'h-60 bg-abyss sm:h-72 lg:h-auto';
 
             return (
               <article
@@ -229,8 +235,13 @@ export function RitualLayers() {
                     </div>
                   </div>
 
-                  {/* Fotografia Atmosférica da Camada */}
-                  <div className="relative h-60 overflow-hidden rounded-b-[1.75rem] border-t border-silver/12 bg-abyss sm:h-72 sm:rounded-b-[2rem] lg:col-span-5 lg:h-auto lg:min-h-[420px] lg:rounded-r-[2rem] lg:rounded-bl-none lg:border-t-0 lg:border-l">
+                  {/* Fotografia Atmosférica da Camada (respeita 1:1 integral no Passo 03 e 4:3 no Passo 02) */}
+                  <div
+                    className={[
+                      'relative overflow-hidden rounded-b-[1.75rem] border-t border-silver/12 sm:rounded-b-[2rem] lg:col-span-5 lg:flex lg:min-h-[420px] lg:items-center lg:justify-center lg:rounded-r-[2rem] lg:rounded-bl-none lg:border-t-0 lg:border-l',
+                      mobileFrameClass,
+                    ].join(' ')}
+                  >
                     <img
                       src={asset.src}
                       alt={asset.alt}
@@ -238,18 +249,26 @@ export function RitualLayers() {
                       height={dims.height}
                       loading="lazy"
                       decoding="async"
-                      className={`h-full w-full object-cover ${objectPositionClass}`}
+                      className={
+                        isSquareArtwork
+                          ? 'h-full w-full object-contain object-center'
+                          : `h-full w-full object-cover ${objectPositionClass}`
+                      }
                     />
-                    <div
-                      aria-hidden="true"
-                      className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#150B26]/80 via-transparent to-abyss/20"
-                    />
-                    <span
-                      aria-hidden="true"
-                      className="pointer-events-none absolute right-6 bottom-4 font-display text-7xl leading-none italic text-serena-pearl/25 select-none"
-                    >
-                      {step.number}
-                    </span>
+                    {!isSquareArtwork && (
+                      <>
+                        <div
+                          aria-hidden="true"
+                          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#150B26]/80 via-transparent to-abyss/20"
+                        />
+                        <span
+                          aria-hidden="true"
+                          className="pointer-events-none absolute right-6 bottom-4 font-display text-7xl leading-none italic text-serena-pearl/25 select-none"
+                        >
+                          {step.number}
+                        </span>
+                      </>
+                    )}
                   </div>
                 </div>
               </article>

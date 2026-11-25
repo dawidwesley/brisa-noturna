@@ -374,14 +374,15 @@ function ActThreeSerenaReveal() {
         gap: '56px',
       }}
     >
-      {/* Moldura do Frasco Serena */}
+      {/* Moldura 1:1 Integral do Frasco Serena (540x540 sem cortar bordas nem laterais) */}
       <div
         style={{
           position: 'relative',
-          width: '410px',
-          height: '560px',
+          width: '540px',
+          height: '540px',
           borderRadius: '24px',
           overflow: 'hidden',
+          backgroundColor: '#080410',
           border: '1px solid rgba(228, 223, 240, 0.26)',
           boxShadow: '0 32px 72px -18px rgba(4, 2, 10, 0.94)',
           transform: `translate3d(0, ${bottleY}px, 0) scale3d(${bottleScale}, ${bottleScale}, 1)`,
@@ -391,11 +392,13 @@ function ActThreeSerenaReveal() {
         <img
           src={IMAGE_ASSETS['serena-hero'].src}
           alt={IMAGE_ASSETS['serena-hero'].alt}
+          width={1254}
+          height={1254}
           decoding="async"
           style={{
             width: '100%',
             height: '100%',
-            objectFit: 'cover',
+            objectFit: 'contain',
           }}
         />
         <div

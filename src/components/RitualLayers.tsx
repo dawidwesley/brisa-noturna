@@ -129,9 +129,11 @@ export function RitualLayers() {
             const dims = IMAGE_DIMENSIONS[step.imageKey];
             const isSquareArtwork = step.imageKey === 'serena-hero';
             const isRitualPhoto = step.imageKey === 'ritual-noturno';
-            const objectPositionClass = isRitualPhoto
-              ? 'object-[58%_32%]'
-              : 'object-center';
+            const objectPositionClass = isSquareArtwork
+              ? 'object-left'
+              : isRitualPhoto
+                ? 'object-[58%_32%]'
+                : 'object-center';
             const mobileFrameClass = isSquareArtwork
               ? 'aspect-square bg-abyss lg:aspect-auto'
               : isRitualPhoto
